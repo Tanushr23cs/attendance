@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Live Scanner | ZENMASTER</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body data-page="attendance">
+  <div id="three-bg"></div>
+
+  <nav class="navbar glass">
+    <div class="navbar-container">
+      <a class="navbar-brand" href="index.html"><i class="fas fa-infinity"></i><span>ZENMASTER</span></a>
+      <ul class="navbar-menu">
+        <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+        <li><a class="active" href="attendance.html"><i class="fas fa-bolt"></i> Attendance</a></li>
+        <li><a href="dashboard.html"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+        <li><a href="register.html"><i class="fas fa-user-plus"></i> Register</a></li>
+        <li><a href="profile.html"><i class="fas fa-id-card"></i> Profiles</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="page-hero">
+    <div class="page-title">
+      <h1><i class="fas fa-video"></i> Live Attendance Scanner</h1>
+      <p>Neon overlay, 3D scan ring, instant status.</p>
+    </div>
+    <div class="hero-actions">
+      <button id="startBtn" class="btn btn-primary"><i class="fas fa-play"></i> Start Scan</button>
+      <button id="stopBtn" class="btn btn-danger" style="display:none;"><i class="fas fa-stop"></i> Stop</button>
+      <button class="btn btn-ghost" onclick="resetSession()"><i class="fas fa-rotate"></i> Reset</button>
+      <button class="btn btn-ghost" onclick="exportSession()"><i class="fas fa-download"></i> Export Log</button>
+    </div>
+  </header>
+
+  <main class="page-container two-col">
+    <section class="glass card wide">
+      <div class="camera-wrap">
+        <div class="camera-frame">
+          <video id="video" autoplay muted playsinline></video>
+          <canvas id="canvas" class="hidden"></canvas>
+          <div class="scan-overlay">
+            <div class="scan-ring"></div>
+          </div>
+        </div>
+        <div class="status-bar">
+          <span class="pill live" id="scan-state">Ready</span>
+          <span class="muted">Face alignment optimized</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="glass card stack">
+      <div class="stat-row">
+        <div><label>Session</label><strong id="sessionStatus">Idle</strong></div>
+        <div><label>Elapsed</label><strong id="scanTime">00:00:00</strong></div>
+        <div><label>Faces</label><strong id="facesDetected">0</strong></div>
+        <div><label>Marked</label><strong id="sessionMarked">0</strong></div>
+      </div>
+
+      <div class="stat-row"
+        style="background: linear-gradient(135deg, rgba(167, 139, 250, 0.2), rgba(0, 229, 255, 0.2)); padding: 12px; border-radius: 8px; margin-bottom: 12px;">
+        <div style="flex: 1; text-align: center;"><label style="font-size: 14px;">📊 PRESENT TODAY</label><strong
+            style="font-size: 32px; color: #10b981;" id="todayPresent">0</strong></div>
+      </div>
+
+      <div class="mini-grid">
+        <div class="mini-card"><i class="fas fa-users"></i>
+          <div>
+            <p>Total Unique</p><strong id="uniqueStudents">0</strong>
+          </div>
+        </div>
+        <div class="mini-card"><i class="fas fa-stopwatch"></i>
+          <div>
+            <p>Session Duration</p><strong id="sessionDuration">0 min</strong>
+          </div>
+        </div>
+        <div class="mini-card"><i class="fas fa-gauge-high"></i>
+          <div>
+            <p>Avg Rate</p><strong id="scanRate">0/min</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <h3><i class="fas fa-list"></i> Session Log</h3>
+      <div class="log-output" id="output">
+        <p class="muted">System ready. Click start to begin...</p>
+      </div>
+    </section>
+  </main>
+
+  <section class="panel glass">
+    <div class="panel-head">
+      <h2>Today’s Marks</h2>
+      <p>Live-updating table with status chips.</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Time</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="todayAttendanceTable">
+          <tr>
+            <td colspan="3" class="muted">No records yet</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="footer glass">
+    <p>© 2026 ZENMASTER · Live Scanner</p>
+    <div class="footer-links"><a href="dashboard.html">Dashboard</a><a href="register.html">Register</a><a
+        href="profile.html">Profiles</a></div>
+  </footer>
+
+  <script defer src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.12/dist/face-api.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+  <script src="script.js"></script>
+  <script>
+    // Real-time unique face detection and drawing circles (optional)
+    async function loadFaceApiModels() {
+      if (!window.faceapi) throw new Error('faceapi not available');
+      // Use the reliable vladmandic CDN for models
+      try {
+        await faceapi.nets.tinyFaceDetector.loadFromUri('https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.12/model/');
+      } catch (e) {
+        // model files not present; rethrow to be handled by caller
+        throw e;
+      }
+    }
+
+    async function startFaceDetection() {
+      const video = document.getElementById('video');
+      const canvas = document.getElementById('canvas');
+      if (!video || !canvas) return;
+
+      if (!window.faceapi) {
+        console.warn('face-api.js not loaded — skipping client-side face overlays. Place face-api.min.js and models/ to enable overlays.');
+        // ensure canvas is hidden so underlying video shows
+        canvas.classList.add('hidden');
+        return;
+      }
+
+      // wait for video metadata so width/height are available
+      if (video.readyState < 2) {
+        await new Promise((resolve) => video.addEventListener('loadedmetadata', resolve, { once: true }));
+      }
+
+      try {
+        await loadFaceApiModels();
+      } catch (e) {
+        console.warn('Failed to load face-api models:', e);
+        canvas.classList.add('hidden');
+        return;
+      }
+
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      canvas.classList.remove('hidden');
+      const displaySize = { width: canvas.width, height: canvas.height };
+      faceapi.matchDimensions(canvas, displaySize);
+
+      async function detectLoop() {
+        if (video.paused || video.ended) return setTimeout(detectLoop, 500);
+        let detections = [];
+        try {
+          detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions());
+        } catch (err) {
+          console.warn('faceapi detection error:', err);
+        }
+
+        // Remove duplicates by proximity
+        const unique = [];
+        detections.forEach(det => {
+          if (!unique.some(u => Math.abs(u.box.x - det.box.x) < 40 && Math.abs(u.box.y - det.box.y) < 40)) {
+            unique.push(det);
+          }
+        });
+
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        unique.forEach(det => {
+          ctx.beginPath();
+          ctx.arc(det.box.x + det.box.width / 2, det.box.y + det.box.height / 2, Math.max(det.box.width, det.box.height) / 2, 0, 2 * Math.PI);
+          ctx.lineWidth = 3;
+          ctx.strokeStyle = '#10b981';
+          ctx.stroke();
+        });
+
+        // Update UI with unique face count
+        const facesDetected = document.getElementById('facesDetected');
+        if (facesDetected) facesDetected.textContent = unique.length;
+        requestAnimationFrame(detectLoop);
+      }
+      detectLoop();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Start after small delay to allow camera startup; faceapi loading is optional
+      setTimeout(() => startFaceDetection().catch((e) => console.warn(e)), 1200);
+    });
+
+    // ── DIRECT ATTENDANCE SYNC (bypasses script.js caching) ──────────────────
+    async function directFetchTodayAttendance() {
+      try {
+        const res = await fetch('http://127.0.0.1:5000/get_today_attendance');
+        if (!res.ok) { console.warn('[SYNC] Bad response:', res.status); return; }
+        const data = await res.json();
+        console.log('[SYNC] Today count:', data.count, '| Records:', data.records?.length);
+
+        // 1. Update "Present Today" counter
+        const todayEl = document.getElementById('todayPresent');
+        if (todayEl) todayEl.textContent = data.count || 0;
+
+        // 2. Update sessionMarked counter
+        const markedEl = document.getElementById('sessionMarked');
+        if (markedEl && (data.count > 0)) markedEl.textContent = data.count;
+
+        // 3. Update attendance table
+        const tbody = document.getElementById('todayAttendanceTable');
+        if (tbody) {
+          const records = Array.isArray(data.records) ? data.records : [];
+          if (records.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="3" class="muted">No records yet</td></tr>';
+          } else {
+            tbody.innerHTML = records.map(r => `
+              <tr>
+                <td>${r.name || ''}</td>
+                <td>${r.time || '--:--:--'}</td>
+                <td><span class="pill live">${r.status || 'Present'}</span></td>
+              </tr>`).join('');
+          }
+        }
+      } catch (e) {
+        console.error('[SYNC] Fetch failed:', e.message);
+      }
+    }
+
+    // Run immediately on load, then poll every 3 seconds
+    document.addEventListener('DOMContentLoaded', () => {
+      directFetchTodayAttendance();
+      setInterval(directFetchTodayAttendance, 3000);
+    });
+    // ─────────────────────────────────────────────────────────────────────────
+
+    // ── MANUAL MARK FALLBACK (works even without face descriptors) ────────────
+    // Creates an overlay input; call window.markByName('Alice') from console too
+    window.markByName = async function(name) {
+      if (!name || !name.trim()) return;
+      try {
+        const res = await fetch('http://127.0.0.1:5000/mark_attendance', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: name.trim() })
+        });
+        const data = await res.json();
+        console.log('[MANUAL MARK]', data.message, '| Status:', data.recognized?.[0]?.status);
+
+        // Force immediate UI refresh
+        await directFetchTodayAttendance();
+
+        // Also update sessionMarked counter
+        if (data.recognized && data.recognized[0]?.status === 'marked') {
+          const markedEl = document.getElementById('sessionMarked');
+          if (markedEl) markedEl.textContent = parseInt(markedEl.textContent || '0') + 1;
+          const uniqueEl = document.getElementById('uniqueStudents');
+          if (uniqueEl) uniqueEl.textContent = parseInt(uniqueEl.textContent || '0') + 1;
+        }
+
+        return data;
+      } catch(e) {
+        console.error('[MANUAL MARK] Failed:', e.message);
+      }
+    };
+
+    // Auto-mark by name when face detected but no descriptor match
+    // Patches into the global scope after script.js loads
+    window.addEventListener('load', () => {
+      const origStart = window.startAttendance;
+      if (!origStart) return;
+
+      // Override: after session starts, if no descriptors registered,
+      // show a floating name entry bar so attendance can still be marked
+      window.startAttendance = async function() {
+        await origStart();
+        // Check if any descriptors were loaded
+        setTimeout(() => {
+          if (typeof registeredDescriptors !== 'undefined' && registeredDescriptors.length === 0) {
+            console.warn('[SYNC] No face descriptors registered. Students must re-register with camera.');
+            showManualMarkBar();
+          }
+        }, 2000);
+      };
+    });
+
+    function showManualMarkBar() {
+      if (document.getElementById('_manualMarkBar')) return; // already shown
+      const bar = document.createElement('div');
+      bar.id = '_manualMarkBar';
+      bar.style.cssText = `
+        position:fixed; bottom:80px; left:50%; transform:translateX(-50%);
+        background:rgba(15,23,42,0.95); border:1px solid rgba(124,58,237,0.5);
+        border-radius:12px; padding:12px 18px; display:flex; gap:10px;
+        align-items:center; z-index:9999; backdrop-filter:blur(12px);
+        box-shadow:0 8px 32px rgba(0,0,0,0.4);
+      `;
+      bar.innerHTML = `
+        <span style="color:#a5f3fc;font-size:13px;white-space:nowrap;">⚠ No descriptors — mark by name:</span>
+        <input id="_manualNameInput" placeholder="Student name..." style="
+          background:rgba(255,255,255,0.08); border:1px solid rgba(124,58,237,0.4);
+          border-radius:8px; color:#fff; padding:6px 12px; font-size:14px; outline:none; width:160px;
+        ">
+        <button onclick="window.markByName(document.getElementById('_manualNameInput').value); document.getElementById('_manualNameInput').value='';" style="
+          background:linear-gradient(135deg,#7c3aed,#10b981); border:none;
+          border-radius:8px; color:#fff; padding:6px 14px; cursor:pointer; font-size:13px;
+        ">Mark ✓</button>
+        <button onclick="document.getElementById('_manualMarkBar').remove();" style="
+          background:transparent; border:1px solid rgba(255,255,255,0.2);
+          border-radius:8px; color:#a1a1aa; padding:6px 10px; cursor:pointer; font-size:12px;
+        ">✕</button>
+      `;
+      document.body.appendChild(bar);
+
+      // Allow pressing Enter in the input
+      document.getElementById('_manualNameInput').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          window.markByName(e.target.value);
+          e.target.value = '';
+        }
+      });
+    }
+    // ─────────────────────────────────────────────────────────────────────────
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Analytics Dashboard | ZENMASTER</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body data-page="dashboard">
+  <div id="three-bg"></div>
+
+  <nav class="navbar glass">
+    <div class="navbar-container">
+      <a class="navbar-brand" href="index.html"><i class="fas fa-infinity"></i><span>ZENMASTER</span></a>
+      <ul class="navbar-menu">
+        <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="attendance.html"><i class="fas fa-bolt"></i> Attendance</a></li>
+        <li><a class="active" href="dashboard.html"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+        <li><a href="register.html"><i class="fas fa-user-plus"></i> Register</a></li>
+        <li><a href="profile.html"><i class="fas fa-id-card"></i> Profiles</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="page-hero">
+    <div class="page-title">
+      <h1><i class="fas fa-chart-pie"></i> Analytics Dashboard</h1>
+      <p>Realtime stats, filters, and exports with animated cards.</p>
+    </div>
+    <div class="toolbar">
+      <select id="month-select" class="select" onchange="loadSelectedMonth()">
+        <option value="all">All months</option>
+      </select>
+      <button class="btn btn-ghost" onclick="refreshDashboard()"><i class="fas fa-arrows-rotate"></i> Refresh</button>
+      <button class="btn btn-primary" onclick="exportRecords()"><i class="fas fa-file-arrow-down"></i> Export</button>
+    </div>
+  </header>
+
+  <main class="page-container">
+    <div class="stat-grid">
+      <div class="stat-card" data-tilt><i class="fas fa-users"></i>
+        <div>
+          <p>Total Students</p><strong id="statTotalStudents">0</strong>
+        </div>
+      </div>
+      <div class="stat-card" data-tilt><i class="fas fa-check-circle"></i>
+        <div>
+          <p>Present Today</p><strong id="statTodayPresent">0</strong>
+        </div>
+      </div>
+      <div class="stat-card" data-tilt><i class="fas fa-calendar-day"></i>
+        <div>
+          <p>Class Days</p><strong id="statClassDays">0</strong>
+        </div>
+      </div>
+      <div class="stat-card" data-tilt><i class="fas fa-wave-square"></i>
+        <div>
+          <p>Avg Attendance</p><strong id="statAvgAttendance">0%</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Analytics Chart -->
+    <section class="glass card">
+      <div class="card-head">
+        <h3><i class="fas fa-chart-area"></i> Attendance Trends</h3>
+      </div>
+      <div style="position: relative; height: 300px; width: 100%;">
+        <canvas id="attendanceChart"></canvas>
+      </div>
+    </section>
+
+    <section class="glass card">
+      <div class="card-head">
+        <h3><i class="fas fa-filter"></i> Student Finder</h3>
+        <div class="search-bar">
+          <input id="search-name" class="input" placeholder="Name / roll / course">
+          <button class="btn btn-primary" onclick="searchFromDashboard()"><i class="fas fa-search"></i> Search</button>
+          <button class="btn btn-ghost" onclick="clearSearch()"><i class="fas fa-xmark"></i></button>
+        </div>
+      </div>
+      <div class="profile-slot hidden" id="student-profile"></div>
+    </section>
+
+    <section class="glass card">
+      <div class="card-head">
+        <h3><i class="fas fa-table"></i> Attendance Records</h3>
+        <span class="pill" id="recordCount">0 records</span>
+      </div>
+      <div class="table-wrap">
+        <table id="table">
+          <thead>
+            <tr>
+              <th>Student</th>
+              <th>Date</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="3" class="muted">Loading...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="glass card">
+      <div class="card-head">
+        <h3><i class="fas fa-clock"></i> Period-wise Attendance Today</h3>
+      </div>
+      <div class="table-wrap">
+        <table class="period-table">
+          <thead>
+            <tr>
+              <th>Period</th>
+              <th>Present</th>
+              <th>Names</th>
+            </tr>
+          </thead>
+          <tbody id="periodAttendanceTable">
+            <tr>
+              <td colspan="3" class="muted">Loading...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer glass">
+    <p>© 2026 ZENMASTER · Analytics</p>
+    <div class="footer-links"><a href="attendance.html">Attendance</a><a href="register.html">Register</a><a
+        href="profile.html">Profiles</a></div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>

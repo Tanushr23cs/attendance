@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Profiles | ZENMASTER</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="profile">
+  <div id="three-bg"></div>
+
+  <nav class="navbar glass">
+    <div class="navbar-container">
+      <a class="navbar-brand" href="index.html"><i class="fas fa-infinity"></i><span>ZENMASTER</span></a>
+      <ul class="navbar-menu">
+        <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="attendance.html"><i class="fas fa-bolt"></i> Attendance</a></li>
+        <li><a href="dashboard.html"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+        <li><a href="register.html"><i class="fas fa-user-plus"></i> Register</a></li>
+        <li><a class="active" href="profile.html"><i class="fas fa-id-card"></i> Profiles</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="page-hero">
+    <div class="page-title">
+      <h1><i class="fas fa-id-card-clip"></i> Profile Management</h1>
+      <p>Search, inspect, and admin‑edit with audit trail.</p>
+    </div>
+  </header>
+
+  <main class="page-container">
+    <section class="glass card">
+      <div class="card-head">
+        <h3><i class="fas fa-search"></i> Find Student</h3>
+        <div class="search-bar">
+          <input id="profile-search-name" class="input" placeholder="Student name">
+          <button class="btn btn-primary" onclick="searchProfilePage()"><i class="fas fa-search"></i></button>
+        </div>
+      </div>
+      <div class="profile-slot hidden" id="profile-result"></div>
+    </section>
+
+    <section class="glass card hidden" id="admin-edit">
+      <div class="card-head">
+        <h3><i class="fas fa-lock"></i> Admin Editor</h3>
+        <span class="pill">Secure</span>
+      </div>
+
+      <div class="grid two">
+        <div>
+          <label class="form-label">Current Name</label>
+          <input id="edit-current-name" class="input" readonly>
+        </div>
+        <div>
+          <label class="form-label">New Name</label>
+          <input id="edit-new-name" class="input" placeholder="Leave blank to keep">
+        </div>
+        <div>
+          <label class="form-label">Details</label>
+          <input id="edit-details" class="input" placeholder="Department / Year / Roll">
+        </div>
+      </div>
+
+      <div class="hero-actions">
+        <button class="btn btn-primary" onclick="toggleAdvancedEditor()"><i class="fas fa-sliders-h"></i> Advanced Editor</button>
+        <button class="btn btn-ghost" onclick="bulkMarkLeave()"><i class="fas fa-calendar-minus"></i> Bulk Leave</button>
+      </div>
+
+      <div id="daily-attendance-editor" class="hidden"></div>
+
+      <div class="hero-actions">
+        <button class="btn btn-success" onclick="saveStudentUpdate()"><i class="fas fa-save"></i> Save</button>
+        <button class="btn btn-ghost" onclick="closeEditMode()"><i class="fas fa-xmark"></i> Cancel</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer glass">
+    <p>© 2026 ZENMASTER · Profiles</p>
+    <div class="footer-links"><a href="dashboard.html">Dashboard</a><a href="attendance.html">Attendance</a><a href="register.html">Register</a></div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

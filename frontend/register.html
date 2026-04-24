@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Register | ZENMASTER</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="register">
+  <div id="three-bg"></div>
+
+  <nav class="navbar glass">
+    <div class="navbar-container">
+      <a class="navbar-brand" href="index.html"><i class="fas fa-infinity"></i><span>ZENMASTER</span></a>
+      <ul class="navbar-menu">
+        <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="attendance.html"><i class="fas fa-bolt"></i> Attendance</a></li>
+        <li><a href="dashboard.html"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+        <li><a class="active" href="register.html"><i class="fas fa-user-plus"></i> Register</a></li>
+        <li><a href="profile.html"><i class="fas fa-id-card"></i> Profiles</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="page-hero">
+    <div class="page-title">
+      <h1><i class="fas fa-user-plus"></i> Register Student</h1>
+      <p>Guided capture with live framing assist.</p>
+    </div>
+  </header>
+
+  <main class="page-container two-col">
+    <section class="glass card">
+      <h3>Student Information</h3>
+      <label class="form-label">Full Name</label>
+      <input id="name" class="input" placeholder="e.g. Alex Johnson">
+      <label class="form-label">Details</label>
+      <input id="details" class="input" placeholder="Department / Year / Roll">
+      <div class="divider"></div>
+      <h3>Capture</h3>
+      <div class="camera-frame small">
+        <video id="video" autoplay muted playsinline></video>
+        <canvas id="canvas" class="hidden"></canvas>
+        <div class="scan-overlay"><div class="scan-ring"></div></div>
+      </div>
+      <div class="hero-actions">
+        <button class="btn btn-primary" onclick="registerStudent()"><i class="fas fa-camera"></i> Capture & Save</button>
+        <a class="btn btn-ghost" href="dashboard.html"><i class="fas fa-chart-line"></i> Go to Dashboard</a>
+      </div>
+      <div class="log-output" id="output"><p class="muted">System ready for registration.</p></div>
+    </section>
+
+    <section class="glass card stack">
+      <h3><i class="fas fa-sparkles"></i> Pro Tips</h3>
+      <ul class="bullets">
+        <li>Front‑lit face, avoid backlight.</li>
+        <li>Keep head inside the neon ring.</li>
+        <li>Remove glasses/hat if possible.</li>
+        <li>Capture once per student.</li>
+      </ul>
+      <div class="info-banner">
+        <i class="fas fa-shield-alt"></i>
+        <p>Data is encrypted on transfer and at rest.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer glass">
+    <p>© 2026 ZENMASTER · Registration</p>
+    <div class="footer-links"><a href="attendance.html">Attendance</a><a href="dashboard.html">Dashboard</a><a href="profile.html">Profiles</a></div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

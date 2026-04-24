@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ZENMASTER · Intelligent Attendance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="home">
+  <div id="three-bg"></div>
+
+  <nav class="navbar glass">
+    <div class="navbar-container">
+      <a class="navbar-brand" href="index.html">
+        <i class="fas fa-infinity"></i><span>ZENMASTER</span>
+      </a>
+      <ul class="navbar-menu">
+        <li><a class="active" href="index.html"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="attendance.html"><i class="fas fa-bolt"></i> Attendance</a></li>
+        <li><a href="dashboard.html"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+        <li><a href="register.html"><i class="fas fa-user-plus"></i> Register</a></li>
+        <li><a href="profile.html"><i class="fas fa-id-card"></i> Profiles</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-copy">
+      <span class="chip">Next‑gen biometrics</span>
+      <h1>Face‑first attendance with cinematic UI.</h1>
+      <p>Live recognition, instant analytics, bullet‑proof security, and a fluid 3D experience your team will love using.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="attendance.html"><i class="fas fa-video"></i> Launch Scanner</a>
+        <a class="btn btn-ghost" href="dashboard.html"><i class="fas fa-chart-pie"></i> View Insights</a>
+      </div>
+      <div class="hero-metrics">
+        <div><span id="totalStudents">0</span><label>Active students</label></div>
+        <div><span id="todayAttendance">0</span><label>Marked today</label></div>
+        <div><span id="avgAttendance">0%</span><label>Average rate</label></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="orb orb-blue"></div>
+      <div class="orb orb-green"></div>
+      <div class="floating-cards">
+        <article data-tilt>
+          <i class="fas fa-shield-heart"></i>
+          <p>End‑to‑end encryption</p>
+        </article>
+        <article data-tilt>
+          <i class="fas fa-gauge-high"></i>
+          <p>3s recognition loop</p>
+        </article>
+        <article data-tilt>
+          <i class="fas fa-cloud-arrow-up"></i>
+          <p>Realtime sync</p>
+        </article>
+      </div>
+    </div>
+  </header>
+
+  <section class="panel">
+    <div class="panel-head">
+      <h2>Command Console</h2>
+      <p>One tap to jump between every core flow.</p>
+    </div>
+    <div class="nav-grid">
+      <a class="nav-card" href="attendance.html" data-tilt><i class="fas fa-bolt"></i><div><strong>Live Scanner</strong><p>3D scanner overlay + live stats.</p></div></a>
+      <a class="nav-card" href="dashboard.html" data-tilt><i class="fas fa-chart-column"></i><div><strong>Analytics</strong><p>Heatmaps, deltas, exports.</p></div></a>
+      <a class="nav-card" href="register.html" data-tilt><i class="fas fa-user-plus"></i><div><strong>Register</strong><p>Guided capture with quality hints.</p></div></a>
+      <a class="nav-card" href="profile.html" data-tilt><i class="fas fa-user-gear"></i><div><strong>Profiles</strong><p>Edit records, bulk leave, audit.</p></div></a>
+    </div>
+  </section>
+
+  <section class="panel glass">
+    <div class="panel-head">
+      <h2>Highlights</h2>
+      <p>Advanced controls packaged with motion.</p>
+    </div>
+    <div class="feature-grid">
+      <article data-tilt><i class="fas fa-face-smile"></i><h3>Precision Vision</h3><p>99.9% face match across angles.</p></article>
+      <article data-tilt><i class="fas fa-wand-magic-sparkles"></i><h3>Smart Cleanup</h3><p>Auto‑merge duplicates & unknowns.</p></article>
+      <article data-tilt><i class="fas fa-satellite"></i><h3>Edge Ready</h3><p>Runs on‑prem or cloud seamlessly.</p></article>
+      <article data-tilt><i class="fas fa-lock"></i><h3>Zero Trust</h3><p>Role based controls + audit log.</p></article>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <h2>Workflow</h2>
+      <p>Three steps with animated guidance.</p>
+    </div>
+    <div class="steps">
+      <div class="step" data-tilt>
+        <span>01</span><h4>Enroll</h4><p>Capture HD face with guided overlay.</p>
+      </div>
+      <div class="step" data-tilt>
+        <span>02</span><h4>Scan</h4><p>Continuous sweep every 3 seconds.</p>
+      </div>
+      <div class="step" data-tilt>
+        <span>03</span><h4>Act</h4><p>Export, notify, and correct in-line.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta panel glass">
+    <div>
+      <h2>Ready to launch the futuristic roll‑call?</h2>
+      <p>Fire up the live scanner or explore analytics now.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="attendance.html"><i class="fas fa-play"></i> Start Now</a>
+        <a class="btn btn-ghost" href="dashboard.html"><i class="fas fa-chart-area"></i> Open Dashboard</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer glass">
+    <p>© 2026 ZENMASTER · Intelligent Attendance System</p>
+    <div class="footer-links">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="attendance.html">Attendance</a>
+      <a href="register.html">Register</a>
+      <a href="profile.html">Profiles</a>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
